@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Simple Quiz with arrays</title>
+</head>
+
+<body>
+<p id="message"></p>
+<button id = "restart">Start the Quiz that use arrays</button>
+<button id = "JSONrestart">Start the Quiz that use JSON</button>
+
+<script type="text/javascript" src="01_quiz.json"></script>
+<script type="text/javascript">
+	var msg = document.getElementById("message");
+	var restart = document.getElementById("restart");
+	var JSONrestart = document.getElementById("JSONrestart");
+	var correctAnswers = 0;
+	var questions = [							 
+		['How many moons does Earth have?', 1],					 
+		['How many moons does Saturn have?', 31],
+		['How many moons does Venus have?', 0]	
+	];
+	var JSONquestions = JSON.parse(quiz);
+	
+		
+	// My function using Arrays
+	function startQuiz(){
+		correctAnswers = 0;
+		for(var i = 0; i < questions.length; i++) {
+			var answer_1 = prompt(questions[i][0], '');
+			if(answer_1 == questions[i][1]){
+				alert("That is correct!");
+				correctAnswers++;
+			} else {
+				alert("Sorry. The correct answer is " + questions[i][1]);
+			}
+		}
+		msg.innerHTML = "You got "+ correctAnswers +" out of "+ questions.length +" questions correct!";
+		restart.innerHTML = "Try the array quiz again";
+	}
+	
+	
+	
+	//My function using JSON
+	function JSONstartQuiz(){
+		correctAnswers = 0;
+		for(var i = 0; i < JSONquestions.length; i++) {
+			var answer_1 = prompt(JSONquestions[i].question, '');
+			if(answer_1 == JSONquestions[i].answer){
+				alert("That is correct!");
+				correctAnswers++;
+			} else {
+				alert("Sorry. The correct answer is " + JSONquestions[i].answer);
+			}
+		}
+		msg.innerHTML = "You got "+ correctAnswers +" out of "+ JSONquestions.length +" questions correct!";
+		JSONrestart.innerHTML = "Try the JSON quiz again";
+	}
+	
+	restart.addEventListener('click', startQuiz);
+	JSONrestart.addEventListener('click', JSONstartQuiz);
+	
+	
+</script>
+</body>
+</html>
