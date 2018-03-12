@@ -33,6 +33,7 @@ class Dice {
 	// class end	
 	}
 
+//Finding HTML elements based on ids
 var result = document.getElementById("result");
 var playerScore = document.getElementById("playerScore");
 var computerScore = document.getElementById("computerScore");
@@ -46,6 +47,7 @@ var computerDice2 = document.getElementById("computerDice2");
 var playerResultOutput = document.getElementById("playerResult");
 var computerResultOutput = document.getElementById("computerResult");
 
+//Retrieving data from local storage, or setting if non exist
 if(localStorage.getItem("name") === null){
 	localStorage.setItem("name", prompt("Name"));
 	var p1 = new Player(localStorage.getItem("name"));
@@ -62,17 +64,18 @@ if(localStorage.getItem("name") === null){
     var playerName = localStorage.getItem("name");
 }
 
-    var dice_1 = new Dice();
-	var dice_2 = new Dice();
-	var dice_3 = new Dice();
-	var dice_4 = new Dice();
+//Preparing the dices
+var dice_1 = new Dice();
+var dice_2 = new Dice();
+var dice_3 = new Dice();
+var dice_4 = new Dice();
 
-    playerNameHeader.innerHTML = playerName;
-    playerScore.innerHTML = "Your score: " + playerPoints;
-    computerScore.innerHTML = "Computer score: " + computerPoints;
+//Printing information
+playerNameHeader.innerHTML = playerName;
+playerScore.innerHTML = "Your score: " + playerPoints;
+computerScore.innerHTML = "Computer score: " + computerPoints;
 
 function play(){
-    
     var playerDice_1 = dice_1.roll();
     var playerDice_2 = dice_2.roll();
     var computerDice_1 = dice_3.roll();
@@ -94,6 +97,7 @@ function play(){
         p1.points++;
     }
     
+    //Output results
     playerDice1.innerHTML = "Dice 1 = "+playerDice_1;
     playerDice2.innerHTML = "Dice 2 = "+playerDice_2;
     computerDice1.innerHTML = "Dice 1 = "+computerDice_1;
@@ -101,7 +105,7 @@ function play(){
     playerScore.innerHTML = "Your score: " + playerPoints;
     computerScore.innerHTML = "Computer score: " + computerPoints;
     
-    // Store
+    // Store new data
     localStorage.setItem("name", playerName);
     localStorage.setItem("computerPoints", computerPoints);
     localStorage.setItem("playerPoints", playerPoints);
