@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<script type="text/javascript" src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+ 
+<script type="text/javascript">
+ 
+ // NOTE for Dreamweaver: Does NOT work in "Real time preview", choose temporary file instead!
+ 
+var gun, target, w, h; // global variables
+
+var pos = 'none';
+    
+var bulletCount = 0;
+ 
+var score = 0;
+ 
+    
+function init(){
+ stage = new createjs.Stage("demoCanvas");
+ h = demoCanvas.height;
+ w = demoCanvas.width;
+ drawGun();
+ drawTarget();
+ trackScore();
+ createjs.Ticker.on("tick", tick); // the main listener
+    window.onkeydown = operateGun;
+
+}
+ 
+function trackScore(){
+ text = new createjs.Text("Score: 0", "20px Arial", "black" );
+ text.x = 400; 
+ text.y = 20;
+ stage.addChild(text);
+
+} 
+ 
+function tick(event) {
+ 
+ if(score == 3){
+ alert('you won the game');
+ location.reload();
+ }
+ 
+    moveTarget();
+ 
+    if(bulletCount > 0){
+    moveBullet();
+    }   
+ stage.update(event);
+}
+  
+function drawGun(){
+    gun = new createjs.Shape(); //instantiating the Shape class
+    gun.graphics.beginFill('#8e1a31');
+    gun.graphics.drawRect(0, 0, 10, 30);
+    gun.x = w/2-(10/2); 
+    gun.y = 270;
+    stage.addChild(gun);
+}
+ 
+function drawTarget(){
+    target = new createjs.Shape(); //instantiating the Shape class
+    target.graphics.beginFill('#274594');
+    target.graphics.drawRect(0, 0, 40, 10);
+    target.x = w/2-(40/2); 
+    twidth = 40; 
+    target.y = 0;
+    stage.addChild(target);
+}
+
+
+function operateGun(event) {
+
+    switch(event.keyCode){
+        case 39: // right arrow key
+            if(gun.x < w - 15){gun.x += 10};
+            break;
+        case 37: // left arrow key
+            if(gun.x > 5){gun.x -= 10};
+            break;
+        case 32: // space bar key
+            ++bulletCount;
+            localStorage.setItem("bullets", bulletCount)
+            bullet(bulletCount);
+            break;
+    }
+}
+    
+function moveBullet(){
+    var bulletid = parseInt(localStorage.getItem("bullets"))    
+ 
+    if(bullet[bulletid].y >= 0 ){
+        bullet[bulletid].y -= 10
+  
+   target.alpha = 0.2;
+   var pt = bullet[bulletid].localToLocal(target.x,0,target);
+  
+   var targetend = parseInt(target.x) + 40;
+  
+   if((pt.x <= targetend) && (pt.x >= target.x) && (pt.y == 0)){
+    target.alpha = 1;
+    text.text = "Score: "+ ++score;
+   }
+
+  
+  
+    }else{
+        stage.removeChild(bullet[bulletid]);
+    }
+    
+}
+    
+function bullet(id){
+ 
+    var oldid = id - 1; 
+    stage.removeChild(bullet[oldid]);
+    
+    bullet[id] = new createjs.Shape(); //instantiating the Shape class
+    bullet[id].graphics.beginFill('#12332a');
+    bullet[id].graphics.drawCircle(0, 0, 3);
+    bullet[id].x = gun.x + 5; 
+    bullet[id].y = 250;
+    stage.addChild(bullet[id]);
+}
+    
+    
+function moveTarget() {
+    
+    if(pos == 'none'){
+        target.x += 3;
+    }
+ 
+    if(target.x == w-twidth+1){
+        pos = 'left';
+  
+    }else if(target.x == 5){
+        pos = 'right';
+    }
+    
+    if(pos == 'left'){
+        target.x -= 3;
+    }else{
+        target.x += 3;
+    }
+} 
+
+
+    
+</script>
+<style type="text/css">
+#demoCanvas {
+ border: 1px solid gray;
+ padding: 2px;
+}
+</style>
+</head>
+
+<body onload="init();">
+<canvas id="demoCanvas" width="500" height="300"> alternate content </canvas>
+</body>
+</html>
