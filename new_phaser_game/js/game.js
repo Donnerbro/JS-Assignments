@@ -5,6 +5,8 @@ var cursors;
 var cat, catcher, cursors, scoreText, GameOver;
 var score = 0;
 
+var level = 'level_1';
+
 var timer, timerEvent, text;
 var countDown = 30;
 

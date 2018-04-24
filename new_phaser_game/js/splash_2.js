@@ -9,6 +9,7 @@ var splash_2_State = {
         nameLabel2.anchor.set(0.5, 0.5);
         
         setTimeout(function () {
+            level = 'level_2';
             game.state.start("level2");
         }, 4000);
     }

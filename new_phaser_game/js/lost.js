@@ -17,7 +17,12 @@ var lostState = {
     },
     
     restart: function() {
-        score = 0;
-        game.state.start('menu');
+        if(level == 'level_1'){
+            score = 0;
+            game.state.start('splash_1');
+        } else {
+            score = 10;
+            game.state.start('splash_2');
+        }
     }
 }
