@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Cat catcher (Phaser.io)</title>
+    <script src="js/phaser2.10.3.min.js"></script>
+    <script>
+        
+        // Initializing a new phaser game
+        // Calling Game class (notice capital "G") with constructor arguments:
+        // Stage width and height, rendering context (CANVAS, WEBGL - support 3D, AUTO), HTML ID selector - if empty: game is attached to <body>, object defining the Phaser main game states
+        var game = new Phaser.Game(800, 600, Phaser.CANVAS, '', {preload: preload, create: create, update: update});
+        var cursors;
+        
+        var cat, catcher, cursors, scoreText, GameOver;
+        var score = 0;
+        
+        function preload(){
+            // Load your game assets (instance name path)
+            game.load.image('bg', 'images/bg.png');
+            game.load.image('catcher', 'images/catcher.png');
+            game.load.image('cat', 'images/cat.png');
+        }
+        
+        function create(){
+            //world building / game setup - actually placing the elements
+            game.add.sprite(0, 0, 'bg');
+            catcher = game.add.sprite(game.width / 2, game.height / 2, 'catcher');
+            cat = game.add.sprite(game.width * Math.random(), game.height * Math.random(), 'cat');
+            scoreText = game.add.text(550, 50, 'Score: 0', scoreStyles);
+            var scoreStyles = { fontSize: '20px', fill: '#000' };
+            GameOver = game.add.text(game.width / 2, game.height / 2, '', { fontSize: '40px', fill: 'red' });
+            //activate the physics engine in order to move elements and place anchor points
+            //takes 2 arguments: object and engine type
+            game.physics.enable(catcher, Phaser.Physics.ARCADE);
+            game.physics.enable(cat, Phaser.Physics.ARCADE);
+            
+            cat.anchor.set(0.5, 0.5);
+            catcher.anchor.set(0.5, 0.5);
+            GameOver.anchor.set(0.5,0.5);
+            
+            //invoke the games controls
+            cursors = game.input.keyboard.createCursorKeys();
+        }
+        
+        function update(){
+            // run the game loop
+            //if left arrow key is pressed
+            if(cursors.left.isDown && catcher.x > 5){
+                catcher.x -= 5;
+                //scalling 100% to point the element in opposite direction
+                catcher.scale.x = 1
+            }
+            if(cursors.right.isDown && catcher.x < game.width - 5){
+                catcher.x += 5;
+                catcher.scale.x = -1
+            }
+            if(cursors.up.isDown && catcher.y > 5){
+                catcher.y -= 5;
+            }
+            if(cursors.down.isDown && catcher.y < game.height - 5){
+                catcher.y += 5;
+            }
+            
+            game.physics.arcade.overlap(catcher, cat, catHitHandler);
+            
+            //alternate hittest
+            /*if (checkOverlap(catcher, cat))
+            {
+                cat.x = game.width * Math.random();
+                cat.y = game.height * Math.random();
+                score += 1;
+                scoreText.text = 'Score: ' + score;
+            }*/
+            
+            if(score == 5){
+                cat.destroy();
+                catcher.destroy();
+                
+                GameOver.text = 'GAME OVER';
+            }
+            
+        }
+        
+        //Exstra functions
+        function catHitHandler(){
+            console.log('cat caught');
+            cat.x = game.width * Math.random();
+            cat.y = game.height * Math.random();
+            score += 1;
+            scoreText.text = 'Score: ' + score;
+        }
+        
+        // function for alternate hittest
+        /*function checkOverlap(spriteA, spriteB) {
+
+            var boundsA = spriteA.getBounds();
+            var boundsB = spriteB.getBounds();
+
+            return Phaser.Rectangle.intersects(boundsA, boundsB);
+
+        }*/
+        
+    </script>
+</head>
+
+<body>
+</body>
+</html>
