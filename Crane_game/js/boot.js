@@ -26,6 +26,6 @@ var bootState = {
 	
     create: function () {
         game.physics.startSystem(Phaser.Physics.ARCADE)
-        game.state.start('level2');
+        game.state.start('before_level1');
     }
 }

@@ -115,7 +115,7 @@ var level1State = {
 		if(block.y > up_limit || block.body.allowGravity == true){
             crane.y -= 5;
         }
-        if(block.y > up_limit){
+        if(block.y > up_limit && block.body.allowGravity == false){
             block.y -= 5;
         }
         console.log('block y-axis: '+block.y);
@@ -127,7 +127,7 @@ var level1State = {
 		if(crane.overlap(block) && block.body.allowGravity == false && block.y < low_limit){
             block.y += 5;
         }
-        if(block.y < low_limit){
+        if(block.y < low_limit || block.body.allowGravity == true){
 			 crane.y += 5;
         }
         console.log('block y-axis: '+block.y);

@@ -4,7 +4,7 @@ var level2State = {
 		//world building / game setup - actually placing the elements
 		game.add.sprite(0, 0, 'bg');
         game.world.setBounds(0, 0, 800, 1200);
-		crane = game.add.sprite(game.width / 2, 500, 'crane');
+		crane = game.add.sprite(game.width / 2, 700, 'crane');
         game.camera.y = 560;
         
         /*blocks = game.add.group();
@@ -12,9 +12,9 @@ var level2State = {
         blocks.x = game.width / 2;
         blocks.y = 300;*/
         
-        block1 = game.add.sprite(crane.x, crane.y + 250, 'block1');
-        block2 = game.add.sprite(crane.x, crane.y + 250, 'block2');
-        block3 = game.add.sprite(crane.x, crane.y + 250, 'block3');
+        block1 = game.add.sprite(crane.x, crane.y, 'block1');
+        block2 = game.add.sprite(-200, crane.y, 'block2');
+        block3 = game.add.sprite(-200, crane.y, 'block3');
         
         //block = game.add.sprite(game.width / 2, 200, 'block');
         platform = game.add.sprite(615, 1125, 'platform');
@@ -28,7 +28,7 @@ var level2State = {
 		game.physics.enable(block3, Phaser.Physics.ARCADE);
 		game.physics.enable(platform, Phaser.Physics.ARCADE);
         
-		crane.anchor.set(0.5, 0.5);
+		crane.anchor.set(0.5, 1);
         
         platform.anchor.set(0.5, 0.5);
         platform.scale.set(1);
@@ -40,31 +40,28 @@ var level2State = {
         spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         
         //set gravity
-        game.physics.arcade.gravity.y = 100;
+        game.physics.arcade.gravity.y = 200;
         
         crane.body.allowGravity = false;
         
         block1.anchor.setTo(0.5,0.5);
         block1.scale.set(1);
         block1.body.allowGravity = false;
-        block1.body.collideWorldBounds = true;
+        //block1.body.collideWorldBounds = true;
         block1.body.bounce.y = 0.2;
-        block1.body.gravity.y = 200;
         
         block2.anchor.setTo(0.5,0.5);
         block2.scale.set(1);
         block2.body.allowGravity = false;
-        block2.body.collideWorldBounds = true;
+        //block2.body.collideWorldBounds = true;
         block2.body.bounce.y = 0.2;
-        block2.body.gravity.y = 200;
         block2.visible = false;
         
         block3.anchor.setTo(0.5,0.5);
         block3.scale.set(1);
         block3.body.allowGravity = false;
-        block3.body.collideWorldBounds = true;
+        //block3.body.collideWorldBounds = true;
         block3.body.bounce.y = 0.2;
-        block3.body.gravity.y = 200;
         block3.visible = false;
 
         platform.body.allowGravity = false;
@@ -75,14 +72,10 @@ var level2State = {
         block_number = 1;
         up_limit = 640;
         low_limit = 750;
+        camera_check = 21;
 	},
 	
 	update: function () {
-        
-        //console.log('crane: '+crane.y);
-        //console.log('block_3: '+block3.y);
-        //console.log('block_2: '+block2.y);
-        //console.log('block_1: '+block1.y);
         
         var hitPlatform = game.physics.arcade.collide(block1, platform);
         var hitPlatform = game.physics.arcade.collide(block2, block1);
@@ -154,7 +147,17 @@ var level2State = {
                     break;
             }
             
-		}  
+		}
+        if(camera_check < 20){
+            game.camera.y -= 4;
+            crane.y -= 4;
+            low_limit -= 4;
+            up_limit -= 4;
+            camera_check++;
+        }
+        
+        console.log("block2 Y : "+block2.y);
+        console.log("block3 Y : "+block3.y);
 		
 	},
 
@@ -184,19 +187,16 @@ var level2State = {
 		if(block.y > up_limit || block.body.allowGravity == true){
             crane.y -= 5;
         }
-        if(block.y > up_limit){
+        if(block.y > up_limit && block.body.allowGravity == false){
             block.y -= 5;
         }
-        console.log('block y-axis: '+block.y);
-        console.log('low_limit: '+low_limit);
-        //console.log(block.y);
 	},
     
     moveDown: function (block) {
 		if(crane.overlap(block) && block.body.allowGravity == false && block.y < low_limit){
             block.y += 5;
         }
-        if(block.y < low_limit){
+        if(block.y < low_limit || block.body.allowGravity == true){
 			 crane.y += 5;
         }
 	},
@@ -206,23 +206,20 @@ var level2State = {
         game.time.events.add(3000, function () {
         if(platform.body.touching.up){
             if(block.x > platform.x - 20 && block.x < platform.x + 20){
-                game.camera.y -= 100 ;
-                crane.y -= 100;
-                up_limit -= 100;
-                low_limit -= 100;
-                console.log(low_limit);
-                console.log(block1.y);
-                
-                if(next_block.visible == false && next_block != ''){
-                    next_block.x = crane.x;
-                    next_block.y = crane.y + 320;
-                    next_block.visible = true;
-                    block_placeholder.y = block.y - 180; 
-                    block_number++;
+                //game.camera.y -= 100 ;
+                camera_check = 0;
+                //crane.y -= 100;
+                //up_limit -= 100;
+                //low_limit -= 100;
+                if(next_block.visible == false || next_block != ''){
+                    game.time.events.add(1000, function () {
+                        next_block.x = crane.x;
+                        next_block.y = crane.y;
+                        next_block.visible = true;
+                        block_placeholder.y = block.y - 180; 
+                        block_number++;
+                    });
                 }
-            } else {
-                console.log('block: '+block.x);
-                console.log('platform: '+platform.x);
             }
         }
        }); 
