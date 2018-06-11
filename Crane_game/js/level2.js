@@ -219,6 +219,11 @@ var level2State = {
                         block_placeholder.y = block.y - 180; 
                         block_number++;
                     });
+                } else {
+                    game.time.events.add(1000, function () {
+                        level = 3;
+                        game.state.start("menu");
+                    });
                 }
             }
         }

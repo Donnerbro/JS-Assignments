@@ -10,6 +10,13 @@ var bootState = {
         game.load.image('crane', 'images/krog.png');
         game.load.image('platform', 'images/block-start.png');
         game.load.image('placeholder', 'images/block-placeholder.png');
+        game.load.image('gameName', 'images/game-name.png');
+        
+        //Menu 
+        game.load.image('worldmap', 'images/worldmap.png');
+        game.load.image('sign', 'images/sign.png');
+        game.load.image('start', 'images/start-btn.png');
+        game.load.image('level_2preview', 'images/finish-1.png');
         
         //before level 1
         game.load.image('fun_fact1', 'images/before-level1.png');
@@ -26,6 +33,6 @@ var bootState = {
 	
     create: function () {
         game.physics.startSystem(Phaser.Physics.ARCADE)
-        game.state.start('before_level1');
+        game.state.start('splash');
     }
 }

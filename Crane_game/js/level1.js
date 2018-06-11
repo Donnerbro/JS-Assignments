@@ -7,6 +7,7 @@ var level1State = {
 		crane = game.add.sprite(game.width / 2, 0, 'crane');
         block1 = game.add.sprite(game.width / 2, 200, 'block_level1');
         platform = game.add.sprite(615, 570, 'platform');
+        block_placeholder = game.add.sprite(platform.x, platform.y - 120, 'placeholder');
         
 		//activate the physics engine in order to move elements and place anchor points
 		//takes 2 arguments: object and engine type
@@ -20,6 +21,8 @@ var level1State = {
         
         block1.scale.set(1);
         platform.scale.set(1);
+        block_placeholder.anchor.set(0.5);
+        block_placeholder.scale.set(1);
 
 		//invoke the games controls
 		cursors = game.input.keyboard.createCursorKeys();
@@ -156,7 +159,8 @@ var level1State = {
                     block_number++;
                 } else{
                     game.time.events.add(1000, function () {
-                        game.state.start("before_level2")
+                        level = 2;
+                        game.state.start("menu");
                     });
                 }
             } else {
